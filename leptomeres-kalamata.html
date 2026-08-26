@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<!--
+  ΣΗΜΕΙΩΣΕΙΣ ΠΡΙΝ ΤΗ ΔΗΜΟΣΙΕΥΣΗ (για τον developer / πωλητή)
+  ------------------------------------------------------------
+  1. ΤΗΛΕΦΩΝΟ / ΔΙΕΥΘΥΝΣΗ — ενημερώθηκαν με τα στοιχεία που εντοπίστηκαν σε
+     δημόσια καταχώρηση επιχειρηματικού καταλόγου (xo.gr) για "LEPTOMERES,
+     Car Washer, Kalamata Center": τηλ. +30 27210 93709, Ακρίτα 101, 24132
+     Καλαμάτα, Μεσσηνία. Η καταχώρηση αντιστοιχεί ακριβώς στο όνομα και τον
+     κλάδο της επιχείρησης, ΔΕΝ επιβεβαιώθηκε όμως απευθείας μέσα από το ίδιο
+     το Google Business Profile — επιβεβαίωσέ τα με τον ιδιοκτήτη πριν τη
+     δημοσίευση.
+  2. ΩΡΑΡΙΟ    — τυπικό ωράριο πλυντηρίου αυτοκινήτων στην Ελλάδα (Δευ–Παρ 8–20, Σαβ 8–15).
+                 Δεν δόθηκε πραγματικό ωράριο — επιβεβαίωσε με τον πελάτη.
+  3. ΒΑΘΜΟΛΟΓΙΑ — παρουσιάζεται μόνο η πραγματική κριτική που δόθηκε (5/5,
+                 "Nikos Y.", Local Guide· το επίθετο έχει κρυφτεί). Δεν
+                 επινοήθηκε συνολικός αριθμός κριτικών/βαθμολογίας — πρόσθεσέ
+                 τον όταν έχεις το πραγματικό στοιχείο από το Google Business
+                 Profile.
+  4. ΧΑΡΤΗΣ    — το iframe χρησιμοποιεί τη διεύθυνση "Ακρίτα 101, Καλαμάτα"
+                 (δεν χρειάζεται API key)· αντικατέστησε με το ακριβές Place ID
+                 όταν υπάρχει καταχωρημένη τοποθεσία στο Google Business Profile.
+  5. ΦΟΡΜΑ     — η φόρμα επικοινωνίας κάνει client-side validation και ανοίγει
+                 mailto:yallourakismarios@gmail.com ως fallback. Λειτουργεί σε
+                 κάθε συσκευή με ρυθμισμένο email client· για αποστολή χωρίς να
+                 ανοίγει εξωτερική εφαρμογή, σύνδεσε ένα backend (π.χ.
+                 Formspree) στο σχόλιο "TODO FORM ENDPOINT".
+-->
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Λεπτομερές — Πλυντήριο &amp; Detailing Αυτοκινήτου | Καλαμάτα</title>
+<meta name="description" content="Λεπτομερές — περιποίηση αυτοκινήτου στην Καλαμάτα από τη δεκαετία του '90. Πλύσιμο, κέρωμα και πλήρες detailing με προσοχή στη λεπτομέρεια.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171a;
+    --panel:#1b1f24;
+    --panel-2:#21262c;
+    --line:rgba(237,234,226,0.10);
+    --paper:#edeae2;
+    --muted:#9ba3ac;
+    --accent:#d98a3d;
+    --accent-dim:#8a5a26;
+    --accent-2:#3fa89a;
+    --radius:14px;
+    --shadow:0 20px 50px -20px rgba(0,0,0,0.6);
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    font-weight:600;
+    margin:0;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px;}
+  .section{padding:64px 0;}
+  .eyebrow{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    font-size:12.5px;
+    color:var(--accent);
+    font-weight:600;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:15px 26px;
+    border-radius:999px;
+    font-weight:600;
+    text-decoration:none;
+    font-size:15.5px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .18s ease, background .18s ease, border-color .18s ease;
+    font-family:'Work Sans', sans-serif;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--accent); color:#161311;}
+  .btn-primary:hover{background:#e79a4e;}
+  .btn-ghost{background:transparent; color:var(--paper); border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+  .btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, button:focus-visible{
+    outline:2px solid var(--accent-2);
+    outline-offset:3px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(20,23,26,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .headerbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px;
+    max-width:var(--maxw); margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Oswald', sans-serif;
+    font-size:19px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    font-weight:700;
+    text-decoration:none;
+    color:var(--paper);
+  }
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;}
+  .header-call{
+    display:flex; align-items:center; gap:10px;
+  }
+  .phone-link{
+    display:none;
+    font-weight:600;
+    font-size:14.5px;
+    text-decoration:none;
+    color:var(--muted);
+  }
+  @media(min-width:640px){ .phone-link{display:inline;} }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:64px 0 48px;
+    overflow:hidden;
+    background:
+      radial-gradient(1100px 500px at 85% -10%, rgba(217,138,61,0.16), transparent 60%),
+      linear-gradient(180deg,#14171a 0%, #14171a 70%, #111417 100%);
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;
+    gap:36px;
+  }
+  @media(min-width:900px){
+    .hero-grid{grid-template-columns:1.15fr 0.85fr; align-items:center; gap:40px;}
+  }
+  .hero h1{
+    font-size:clamp(34px, 8vw, 58px);
+    line-height:1.03;
+    position:relative;
+    display:inline-block;
+    background:linear-gradient(90deg, var(--paper) 0%, var(--paper) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+  }
+  /* signature: polish-shine sweep across the headline on load */
+  .shine-wrap{position:relative; display:inline-block; overflow:hidden;}
+  .shine-wrap::after{
+    content:"";
+    position:absolute;
+    top:0; left:-60%;
+    width:45%; height:100%;
+    background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.55) 45%, rgba(217,138,61,0.65) 55%, transparent 100%);
+    transform:skewX(-18deg);
+    animation:sweep 2.6s ease-in-out 0.4s 1;
+    mix-blend-mode:overlay;
+  }
+  @keyframes sweep{
+    0%{left:-60%;}
+    60%{left:130%;}
+    100%{left:130%;}
+  }
+  .hero p.lede{
+    margin-top:18px;
+    font-size:17.5px;
+    color:var(--muted);
+    max-width:52ch;
+  }
+  .hero-ctas{
+    display:flex; flex-wrap:wrap; gap:12px;
+    margin-top:28px;
+  }
+  .trustbar{
+    display:flex; flex-wrap:wrap; gap:10px 22px;
+    margin-top:34px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .trust-item{
+    display:flex; align-items:center; gap:8px;
+    font-size:13.5px;
+    color:var(--muted);
+  }
+  .stars{color:var(--accent); letter-spacing:2px; font-size:15px;}
+
+  /* hero visual: line-art car with shine sweep panel */
+  .hero-visual{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px;
+    box-shadow:var(--shadow);
+  }
+  .hero-visual svg{width:100%; height:auto; display:block;}
+  .visual-caption{
+    margin-top:14px;
+    font-size:13px;
+    color:var(--muted);
+    text-align:center;
+  }
+
+  /* ---------- Services ---------- */
+  .section-head{max-width:60ch; margin-bottom:36px;}
+  .section-head h2{font-size:clamp(26px,4.5vw,36px); margin-top:10px;}
+  .section-head p{color:var(--muted); margin-top:12px; font-size:15.5px;}
+
+  .services-grid{
+    display:grid; gap:16px;
+    grid-template-columns:1fr;
+  }
+  @media(min-width:680px){ .services-grid{grid-template-columns:1fr 1fr;} }
+
+  .service-card{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    overflow:hidden;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .service-card:hover{border-color:rgba(217,138,61,0.5); transform:translateY(-2px);}
+  .service-card::before{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(115deg, transparent 30%, rgba(217,138,61,0.10) 50%, transparent 70%);
+    transform:translateX(-120%);
+    transition:transform .6s ease;
+  }
+  .service-card:hover::before{transform:translateX(120%);}
+  .service-card .num{
+    font-family:'Oswald',sans-serif;
+    color:var(--accent-dim);
+    font-size:13px;
+    letter-spacing:0.15em;
+  }
+  .service-card h3{
+    font-size:19.5px;
+    margin-top:10px;
+    text-transform:none;
+    letter-spacing:0;
+  }
+  .service-card p{
+    color:var(--muted);
+    font-size:14.5px;
+    margin-top:10px;
+  }
+  .badge-highlight{
+    display:inline-block;
+    margin-top:12px;
+    font-size:12px;
+    color:var(--accent-2);
+    border:1px solid rgba(63,168,154,0.4);
+    padding:4px 10px;
+    border-radius:999px;
+    letter-spacing:0.03em;
+  }
+
+  /* ---------- About strip ---------- */
+  .about{
+    background:var(--panel-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .about-grid{
+    display:grid; gap:26px;
+  }
+  @media(min-width:800px){ .about-grid{grid-template-columns: 0.9fr 1.1fr; align-items:center;} }
+  .stat-row{display:flex; gap:28px; flex-wrap:wrap; margin-top:22px;}
+  .stat{min-width:100px;}
+  .stat .n{font-family:'Oswald',sans-serif; font-size:32px; color:var(--accent);}
+  .stat .l{font-size:12.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
+  .about blockquote{
+    font-size:18px;
+    color:var(--paper);
+    border-left:3px solid var(--accent);
+    padding-left:18px;
+    margin:0;
+    font-style:normal;
+  }
+
+  /* ---------- Reviews ---------- */
+  .review-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px;
+    max-width:640px;
+    box-shadow:var(--shadow);
+  }
+  .review-top{display:flex; align-items:center; gap:14px;}
+  .avatar{
+    width:48px;height:48px;border-radius:50%;
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-weight:700; color:#14171a; font-size:18px;
+    flex:none;
+  }
+  .reviewer-name{font-weight:600; font-size:15px;}
+  .reviewer-meta{font-size:12.5px; color:var(--muted); margin-top:2px;}
+  .review-stars{color:var(--accent); margin-top:14px; font-size:15px; letter-spacing:2px;}
+  .review-text{margin-top:14px; font-size:16px; color:var(--paper); line-height:1.65;}
+  .review-source{
+    margin-top:18px; display:flex; align-items:center; gap:8px;
+    font-size:12.5px; color:var(--muted);
+  }
+  .reviews-cta{margin-top:26px;}
+
+  /* ---------- Contact ---------- */
+  .contact{background:var(--panel-2); border-top:1px solid var(--line);}
+  .contact-grid{display:grid; gap:28px;}
+  @media(min-width:900px){ .contact-grid{grid-template-columns:1fr 1fr;} }
+  .info-list{list-style:none; padding:0; margin:22px 0 0; display:flex; flex-direction:column; gap:16px;}
+  .info-list li{display:flex; gap:14px; align-items:flex-start; font-size:15px;}
+  .info-icon{
+    width:36px;height:36px;border-radius:9px;flex:none;
+    background:var(--panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px;
+  }
+  .info-list .label{color:var(--muted); font-size:12.5px; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:3px;}
+
+  form{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px;
+  }
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px;}
+  .field input, .field textarea{
+    width:100%;
+    background:var(--ink);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:12px 13px;
+    color:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    font-size:15px;
+  }
+  .field textarea{min-height:100px; resize:vertical;}
+  .field input:focus, .field textarea:focus{border-color:var(--accent);}
+  .form-note{font-size:12.5px; color:var(--muted); margin-top:12px;}
+  .form-status{font-size:13.5px; margin-top:10px; display:none;}
+  .form-status.show{display:block;}
+
+  /* ---------- Sticky mobile call bar ---------- */
+  .mobile-call-bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:60;
+    background:rgba(20,23,26,0.94);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    display:flex; gap:10px;
+  }
+  @media(min-width:640px){ .mobile-call-bar{display:none;} }
+  .mobile-call-bar .btn{flex:1; padding:13px;}
+
+  footer{
+    padding:36px 0 96px;
+    border-top:1px solid var(--line);
+    font-size:13px;
+    color:var(--muted);
+  }
+  @media(min-width:640px){ footer{padding-bottom:40px;} }
+  .footer-row{display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px;}
+
+  ::selection{background:var(--accent); color:#14171a;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="headerbar">
+    <a href="#top" class="brand"><span class="dot"></span>ΛΕΠΤΟΜΕΡΕΣ</a>
+    <div class="header-call">
+      <a class="phone-link" href="tel:+302721093709">2721 093709</a>
+      <!-- TODO: αντικατέστησε τον αριθμό τηλεφώνου παντού στο αρχείο -->
+      <a class="btn btn-primary" href="tel:+302721093709">Καλέστε τώρα</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Πλυντήριο &amp; Detailing Αυτοκινήτου · Καλαμάτα</p>
+        <h1>
+          <span class="shine-wrap">ΚΑΘΕ ΛΕΠΤΟΜΕΡΕΙΑ</span><br>ΜΕΤΡΑΕΙ.
+        </h1>
+        <p class="lede">Από τη δεκαετία του '90 φροντίζουμε κάθε αυτοκίνητο στην Καλαμάτα σαν να είναι δικό μας — εσωτερικό &amp; εξωτερικό πλύσιμο, κέρωμα και ολοκληρωμένο detailing, με προσοχή που φαίνεται στο τελικό αποτέλεσμα.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="tel:+302721093709">📞 Καλέστε τώρα</a>
+          <a class="btn btn-ghost" href="#services">Δείτε τις υπηρεσίες</a>
+        </div>
+        <div class="trustbar">
+          <div class="trust-item"><span class="stars">★★★★★</span> Κριτικές Google Maps</div>
+          <div class="trust-item">📍 Ακρίτα 101, Καλαμάτα</div>
+          <div class="trust-item">🕰️ Πάνω από 30 χρόνια εμπειρίας</div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#d98a3d"/>
+              <stop offset="100%" stop-color="#3fa89a"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="400" height="220" fill="none"/>
+          <path d="M40 150 Q45 110 90 100 L130 78 Q160 64 210 64 L260 78 Q300 90 330 108 Q350 118 355 150"
+                fill="none" stroke="#edeae2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+          <path d="M25 150 L370 150" stroke="#edeae2" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+          <circle cx="100" cy="152" r="20" fill="#14171a" stroke="url(#shine)" stroke-width="4"/>
+          <circle cx="290" cy="152" r="20" fill="#14171a" stroke="url(#shine)" stroke-width="4"/>
+          <path d="M95 108 L215 108 L245 132 L115 132 Z" fill="none" stroke="#9ba3ac" stroke-width="1.5" opacity="0.6"/>
+        </svg>
+        <p class="visual-caption">Πλήρης εξωτερική &amp; εσωτερική περιποίηση — από ένα απλό πλύσιμο έως ολοκληρωμένο detailing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Υπηρεσίες</p>
+        <h2>Από ένα γρήγορο πλύσιμο μέχρι πλήρη αναγέννηση</h2>
+        <p>Επιλέξτε το επίπεδο φροντίδας που χρειάζεται το αυτοκίνητό σας — όλα εκτελούνται με την ίδια προσοχή στη λεπτομέρεια.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="num">01</span>
+          <h3>Εξωτερικό Πλύσιμο &amp; Κέρωμα</h3>
+          <p>Προσεκτικό πλύσιμο αμαξώματος και προστατευτικό κέρωμα που αφήνει λάμψη και προστασία διάρκειας.</p>
+        </div>
+        <div class="service-card">
+          <span class="num">02</span>
+          <h3>Εσωτερικός Καθαρισμός</h3>
+          <p>Καθαρισμός ταπετσαρίας, ταμπλό και δαπέδου — απομάκρυνση σκόνης, λεκέδων και οσμών από την καμπίνα.</p>
+        </div>
+        <div class="service-card">
+          <span class="num">03</span>
+          <h3>Πλήρες Detailing</h3>
+          <p>Ολοκληρωμένη περιποίηση εσωτερικού, εξωτερικού και χώρου κινητήρα, με τη λεπτομέρεια να μπαίνει παντού.</p>
+        </div>
+        <div class="service-card">
+          <span class="num">04</span>
+          <h3>Αναζωογόνηση Ακινητοποιημένου Αυτοκινήτου</h3>
+          <p>Το αυτοκίνητό σας στέκεται καιρό παρκαρισμένο; Το φέρνουμε πίσω σε κατάσταση σχεδόν σαν καινούργιο, μηχανικό χώρο συμπεριλαμβανομένου.</p>
+          <span class="badge-highlight">Ειδικότητά μας</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section class="about section">
+    <div class="wrap about-grid">
+      <div>
+        <p class="eyebrow">Από το '90 στην Καλαμάτα</p>
+        <h2 style="font-size:clamp(24px,4vw,32px); margin-top:10px;">Μια τοπική επιχείρηση με εμπειρία χρόνων</h2>
+        <div class="stat-row">
+          <div class="stat"><div class="n">30+</div><div class="l">Χρόνια παρουσίας</div></div>
+          <div class="stat"><div class="n">5★</div><div class="l">Κριτική Google</div></div>
+          <div class="stat"><div class="n">100%</div><div class="l">Προσοχή στη λεπτομέρεια</div></div>
+        </div>
+      </div>
+      <div>
+        <blockquote>«Αναλαμβάνουμε εσωτερικό και εξωτερικό πλύσιμο και κέρωμα, detailing, με ιδιαίτερη προσοχή στη λεπτομέρεια και στο αποτέλεσμα. Από έναν απλό καθαρισμό μέχρι μια ολοκληρωμένη περιποίηση, φροντίζουμε κάθε αυτοκίνητο σαν να είναι δικό μας.»</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== REVIEWS ===================== -->
+  <section class="section" id="reviews">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Τι λένε οι πελάτες</p>
+        <h2>Πραγματική κριτική, πραγματικό αποτέλεσμα</h2>
+      </div>
+
+      <div class="review-card">
+        <div class="review-top">
+          <div class="avatar">N</div>
+          <div>
+            <div class="reviewer-name">Nikos Y.</div>
+            <div class="reviewer-meta">Local Guide · 8 κριτικές · 4 φωτογραφίες</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">«Εξαιρετικός στη δουλειά του. Έκανε ένα αυτοκίνητο που ήταν παρκαρισμένο ακίνητο για χρόνια να μοιάζει καινούργιο, ακόμα και στον χώρο του κινητήρα, με μεγάλη προσοχή στη λεπτομέρεια και σε πολύ καλή τιμή.»</p>
+        <div class="review-source">🔵 Google Maps · 11 μήνες πριν</div>
+      </div>
+
+      <div class="reviews-cta">
+        <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=%CE%9B%CE%B5%CF%80%CF%84%CE%BF%CE%BC%CE%B5%CF%81%CE%AD%CF%82%20%CE%9A%CE%B1%CE%BB%CE%B1%CE%BC%CE%AC%CF%84%CE%B1" target="_blank" rel="noopener">Δείτε όλες τις κριτικές στο Google →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section class="contact section" id="contact">
+    <div class="wrap contact-grid">
+      <div>
+        <p class="eyebrow">Επικοινωνία</p>
+        <h2 style="font-size:clamp(24px,4vw,32px); margin-top:10px;">Κλείστε ραντεβού σήμερα</h2>
+        <ul class="info-list">
+          <li>
+            <div class="info-icon">📞</div>
+            <div><span class="label">Τηλέφωνο</span><a href="tel:+302721093709">2721 093709</a></div>
+          </li>
+          <li>
+            <div class="info-icon">📍</div>
+            <div><span class="label">Διεύθυνση</span>Ακρίτα 101, 241 32 Καλαμάτα, Μεσσηνία</div>
+          </li>
+          <li>
+            <div class="info-icon">🕗</div>
+            <div>
+              <span class="label">Ωράριο λειτουργίας</span>
+              Δευτέρα – Παρασκευή: 08:00 – 20:00<br>
+              Σάββατο: 08:00 – 15:00<br>
+              Κυριακή: Κλειστά
+            </div>
+          </li>
+        </ul>
+        <a class="btn btn-ghost" style="margin-top:22px;" href="https://www.google.com/maps/dir/?api=1&destination=Λεπτομερές+Ακρίτα+101+Καλαμάτα" target="_blank" rel="noopener">📍 Οδηγίες προς το κατάστημα →</a>
+      </div>
+
+      <div>
+        <form id="contact-form" novalidate>
+          <p class="form-note" style="margin-top:0; margin-bottom:20px;">Για κλείσιμο ραντεβού, καλέστε μας απευθείας στο <a href="tel:+302721093709" style="color:var(--accent);">2721 093709</a>. Για λοιπές ερωτήσεις, συμπληρώστε τη φόρμα και θα επικοινωνήσουμε μαζί σας το συντομότερο.</p>
+          <div class="field">
+            <label for="name">Ονοματεπώνυμο</label>
+            <input type="text" id="name" name="name" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="phone">Τηλέφωνο</label>
+            <input type="tel" id="phone" name="phone" required autocomplete="tel">
+          </div>
+          <div class="field">
+            <label for="message">Μήνυμα</label>
+            <textarea id="message" name="message" placeholder="Πείτε μας λίγα λόγια για το αυτοκίνητο και τι χρειάζεστε..."></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%;">Αποστολή αιτήματος</button>
+          <p class="form-status" id="form-status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© <span id="year"></span> Λεπτομερές — Πλυντήριο &amp; Detailing Αυτοκινήτου, Καλαμάτα. Με παρουσία από τη δεκαετία του '90.</div>
+    <div><a href="tel:+302721093709" style="color:var(--paper);">2721 093709</a></div>
+  </div>
+</footer>
+
+<div class="mobile-call-bar">
+  <a class="btn btn-primary" href="tel:+302721093709">📞 Καλέστε τώρα</a>
+  <a class="btn btn-ghost" href="#contact">Φόρμα επικοινωνίας</a>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // TODO FORM ENDPOINT: αντικατέστησε αυτό το handler με πραγματικό backend
+  // (π.χ. Formspree, Netlify Forms, ή δικό σας API endpoint) πριν τη δημοσίευση.
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    if(!name || !phone){
+      status.textContent = 'Παρακαλώ συμπληρώστε όνομα και τηλέφωνο.';
+      status.style.color = '#e07a5f';
+      status.classList.add('show');
+      return;
+    }
+    const message = document.getElementById('message').value.trim();
+    const subject = encodeURIComponent('Αίτημα ραντεβού από ' + name);
+    const body = encodeURIComponent('Όνομα: ' + name + '\nΤηλέφωνο: ' + phone + '\nΜήνυμα: ' + message);
+    // Fallback: ανοίγει mailto μέχρι να συνδεθεί πραγματικό backend.
+    window.location.href = 'mailto:yallourakismarios@gmail.com?subject=' + subject + '&body=' + body;
+    status.textContent = 'Ευχαριστούμε! Ανοίγει το email σας για να ολοκληρώσετε την αποστολή.';
+    status.style.color = '#3fa89a';
+    status.classList.add('show');
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
